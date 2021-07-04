@@ -62,6 +62,7 @@ message = ""
                 }
             } else {
                 $.msg($.name, "", `OK 账号${k+1}auth已失效`)
+                
             }
             console.log("\n\n")
         }
@@ -69,7 +70,7 @@ message = ""
          date = new Date()
         if ($.isNode() &&date.getHours() == 11 && date.getMinutes()<10) {
             if (message.length != 0) {
-                   await notify.sendNotify("OK语音", `${message}\n\n吹水群：https://t.me/wenmou_car`);
+                   await notify.sendNotify("OK语音", `${message}\n\n吹水群：https://t.me/xiubuye`);
             }
         } else {
             $.msg($.name, "",  message)

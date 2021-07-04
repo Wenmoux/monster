@@ -79,7 +79,7 @@ message = ""
          }
         if ($.isNode() && jrpush) {
             if (message.length != 0) {
-                await notify.sendNotify("10s阅读", `${message}\n\n吹水群：https://t.me/wenmou_car`);
+                await notify.sendNotify("10s阅读", `${message}\n\n吹水群：https://t.me/xiubuye`);
             }
         } else {
             $.msg($.name, "", '10s阅读' + message)
