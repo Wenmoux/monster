@@ -17,7 +17,7 @@ if (cbuys) {
         headers["x-csrftoken"] = null
         headers["x-pepe-merchant-id"] = 1
         headers["x-requested-with"] = "com.tencent.mm"
-        headers["authorization"] = cbuy.authorization
+        headers["authorization"] =cbuy.authorization.replace("Bearer","Bearer ")
     } else {
         headers["x-csrftoken"] = cbuy.cookie.match(/csrftoken=(.+?);/)[1]
         headers["sec-ch-ua-mobile"] = "?1"
