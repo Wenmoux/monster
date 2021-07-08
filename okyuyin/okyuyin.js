@@ -106,7 +106,7 @@ function getaskList() {
                     if (data) {
                         let info = JSON.parse(data)
                         if (info.code == 200 && info.data) {
-                            $.taskList = info.data.filter(x => x.taskStatus != 4 && x.taskType != 130 && x.taskType != 27 && x.taskType != 24 && x.taskType != 23)
+                            $.taskList = info.data.filter(x => x.taskStatus != 4 && x.taskType != 130 && x.taskType != 140 && x.taskType != 27 && x.taskType != 24 && x.taskType != 23)
                             console.log("任务列表：")
                             for (p = 0; p < info.data.length; p++) {
                                 let task = info.data[p]
@@ -329,6 +329,8 @@ function sign() {
         });
     });
 }
+
+
 function taskPostUrl(url, body) {
     return {
         url: `http://api.new.okyuyin.com/biz/${url}`,
