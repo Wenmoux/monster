@@ -21,6 +21,7 @@ hostname = api.new.okyuyin.com
 const $ = new Env('OK语音');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const okSource = $.isNode() ? (process.env.oksource ? process.env.oksource : "android") : ($.getdata('oksource') ? $.getdata('oksource') : "ios")
+const okExLimit = $.isNode() ? (process.env. okExLimit? process.env.okExLimit : 100000) : ($.getdata('okExLimit') ? $.getdata('okExLimit') : 100000)
 const okAuth = $.isNode() ? (process.env.okAuth ? process.env.okAuth : "") : ($.getdata('okAuth') ? $.getdata('okAuth') : "")
 let okauthArr = []
 if (okAuth.match("&")) {
@@ -28,6 +29,9 @@ if (okAuth.match("&")) {
 } else {
     okauthArr = [okAuth]
 }
+date = new Date()
+month = date.getMonth() + 1
+day = date.getDate()
 message = ""
 !(async () => {
         if (typeof $request !== "undefined") {
@@ -44,6 +48,7 @@ message = ""
             $.canRead = true
             $.isLogin = true
             $.message = ""
+            $.kf = 0
             auth = okauthArr[k];
             console.log(`--------账号 ${k+1} 任务执行中--------\n`)
             await sign()
@@ -57,6 +62,10 @@ message = ""
                     await receivetask(task.taskType)
                 }
                 await getInfo()
+                if($.kf>okExLimit){
+                console.log(`检测到余额大于${okExLimit}分,开始兑换`)
+                 await exchange($.kf)                                
+                }
                 if ($.message.length != 0) {
                     message +=  "账号" +(k+1)+ "：  " + $.message + " \n"
                 }
@@ -67,7 +76,7 @@ message = ""
             console.log("\n\n")
         }
 
-         date = new Date()
+         
         if ($.isNode() &&date.getHours() == 11 && date.getMinutes()<10) {
             if (message.length != 0) {
                    await notify.sendNotify("OK语音", `${message}\n\n吹水群：https://t.me/xiubuye`);
@@ -139,6 +148,7 @@ function getInfo() {
                         let info = JSON.parse(data)
                         if (info.code == 200) {
                             $.message = `当前${info.data.totalKfraction}K分 已提 ${info.data.converted}K币 `
+                            $.kf = info.data.totalKfraction
                             console.log($.message)
                         } else {
                             console.log(data)
@@ -330,7 +340,43 @@ function sign() {
     });
 }
 
+//k分兑换 
+function exchange(kf) {
+    return new Promise(async (resolve) => {
+        let options = taskPostUrl(`app/summary/kfractionExchangeKmoney?kfraction=98${kf}.0&sureExchangeTime=${date.getFullYear()}-${month>9?month:("0"+month)}-${day>9?day:("0"+day)}`, {})
+     console.log(options)
+           $.post(options, async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(`${JSON.stringify(err)}`);
+                    console.log(`${$.name} API请求失败，请检查网路重试`);
+                } else {
+                    if (data) {
+                        let info = JSON.parse(data)
+                        if (info.code == 200) {
+                            console.log("    兑换结果：" + info.data.kmoney + "K币  成功✅")
+                            if ($.isNode() && date.getHours() == 11 && date.getMinutes() < 10) {
+                                if (message.length != 0) {
+                                    await notify.sendNotify("OK语音", `您有账号成功兑换${info.data.kmoney}K币,可以进行提现啦\n\n吹水群：https://t.me/xiubuye`);
+                                }
+                            } else {
+                                $.msg($.name, "", `您有账号成功兑换${info.data.kmoney}K币,可以进行提现啦`)
+                            }
 
+                            console.log("您可以进入app提现啦")
+                        } else {
+                            console.log("    兑换结果：" + info.msg)
+                        }
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp);
+            } finally {
+                resolve();
+            }
+        });
+    });
+}
 function taskPostUrl(url, body) {
     return {
         url: `http://api.new.okyuyin.com/biz/${url}`,
