@@ -343,8 +343,7 @@ function sign() {
 //k分兑换 
 function exchange(kf) {
     return new Promise(async (resolve) => {
-        let options = taskPostUrl(`app/summary/kfractionExchangeKmoney?kfraction=98${kf}.0&sureExchangeTime=${date.getFullYear()}-${month>9?month:("0"+month)}-${day>9?day:("0"+day)}`, {})
-     console.log(options)
+        let options = taskPostUrl(`app/summary/kfractionExchangeKmoney?kfraction=${kf}.0&sureExchangeTime=${date.getFullYear()}-${month>9?month:("0"+month)}-${day>9?day:("0"+day)}`, {})    
            $.post(options, async (err, resp, data) => {
             try {
                 if (err) {
