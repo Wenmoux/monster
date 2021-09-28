@@ -1,7 +1,7 @@
 /*
 10s阅读
-微信打开立即参与 -> http://h5.qzsjfc.xyz/j/h?upuid=136513&ch=xmy&type=1
-备用链接 -> http://h5.saibangkaile.xyz/j/h?upuid=136513&ch=xmy&type=1
+微信打开立即参与 -> http://h5.vergina.online/j/r2?upuid=136513&ch=xmy
+备用链接 -> http://h5.vergina.online/j/r2?upuid=136513&ch=xmy
 
 每小时有0.3 一天5轮 一天1.5
 进不去关注10秒读书极速版公众号用官方链接
@@ -27,14 +27,14 @@ http-request .*read_channel\/do_read&pageshow.* script-path=https://raw.githubus
 10s阅读 = type=http-request,pattern=.*read_channel\/do_read&pageshow.*,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Wenmoux/scripts/wen/other/jrkuaixun.js,script-update-interval=0
  
 [MITM]
-hostname = m.zxd03.top
+hostname = m.lainiwl.top
  
 */
 const $ = new Env('10s阅读');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jrpush = $.isNode() ? (process.env.jrpush ? process.env.jrpush : false) :false;
 const UA = $.isNode() ? (process.env.Read10UA ? process.env.Read10UA : "Mozilla/5.0 (Linux; Android 11; Redmi K30 Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045617 Mobile Safari/537.36 MMWEBID/5077 MicroMessenger/8.0.6.1900(0x2800063D) Process/tools WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64") : ($.getdata('Read10UA') ? JSON.parse($.getdata('Read10UA')) : "Mozilla/5.0 (Linux; Android 11; Redmi K30 Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045617 Mobile Safari/537.36 MMWEBID/5077 MicroMessenger/8.0.6.1900(0x2800063D) Process/tools WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64")    
-let host = $.getdata('read10surl')?$.getdata('read10surl'):`http://m.56url.co`;
+let host = $.getdata('read10surl')?$.getdata('read10surl'):`http://http://m.renrenshua.shop`;
 let cookiesArr = [$.getdata('read10sck')]
 if ($.isNode()) {
     cookiesArr = process.env.Readck ? process.env.Readck.split("@") : []
@@ -46,8 +46,8 @@ message = ""
             await read10sck()
         }
         if (!cookiesArr[0]) {
-            $.msg($.name, '【提示】请先获取cookie', '微信打开 http://h5.hakc.top/j/r1?upuid=136678&ch=xmy', {
-                "open-url": "http://h5.hakc.top/j/r1?upuid=136678&ch=xmy"
+            $.msg($.name, '【提示】请先获取cookie', '微信打开 http://h5.vergina.online/j/r2?upuid=136513&ch=xmy', {
+                "open-url": "http://h5.vergina.online/j/r2?upuid=136513&ch=xmy"
             });
             return;
         }
@@ -79,7 +79,7 @@ message = ""
          }
         if ($.isNode() && jrpush) {
             if (message.length != 0) {
-                await notify.sendNotify("10s阅读", `${message}\n\n吹水群：https://t.me/xiubuye`);
+                await notify.sendNotify("10s阅读", `${message}\n\n吹水群：https://t.me/wenmou_car`);
             }
         } else {
             $.msg($.name, "", '10s阅读' + message)
@@ -121,23 +121,25 @@ function read(url1) {
             headers,
             url
         }
-         //  console.log(options)
+     //      console.log(options)
         $.get(options, async (err, resp, data) => {
             try {
                 if (err) {
                     //   console.log(`${JSON.stringify(err)}`);
                     //  console.log(`${$.name} API请求失败，请检查网路重试`);
+                  console.log(err)  
                 } else {
-                    //       console.log(url)
+                           console.log(url)
                     if (!url1) {
-                        console.log(data)
+                  //      console.log(data)
                         data = JSON.parse(data);
-                        if (data.url) {
-                          if(!data.jkey){                  
-                            resolve(data.url)}else{
+                        if (data.url) {                               
+                            resolve(data.url)
+                    /*        else{
                                     $.message = "该账号需要验证请手动阅读一次并关掉页面(不要点返回)"
                          $.canRead = false
                             }
+                            */
                         } else {
                        //     console.log(data.click_check)
                             if (data.click_check ) {
